@@ -4,6 +4,7 @@ import it.deas.sdfgateway.model.Stream;
 import it.deas.sdfgateway.model.StreamApplication;
 import it.deas.sdfgateway.v1.dto.NewStreamDTO;
 import it.deas.sdfgateway.v1.dto.StreamApplicationDTO;
+import it.deas.sdfgateway.v1.dto.StreamDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -18,4 +19,6 @@ public interface StreamMapper {
     @Mapping(target = "stream", ignore = true)
     @Mapping(target = "id", ignore = true)
     StreamApplication fromDTO(StreamApplicationDTO streamDTO);
+
+    StreamDTO toDTO(Stream stream);
 }

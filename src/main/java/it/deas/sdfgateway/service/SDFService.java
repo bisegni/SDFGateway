@@ -54,21 +54,21 @@ public class SDFService {
     }
 
     /**
-     * @param deployStreamDTO
+     * @param streamDTO
      */
     public StreamDTO deployStream(NewStreamDTO streamDTO) {
         Stream s = StreamMapper.instance.fromDTO(streamDTO);
-        s = transactionTemplate.execute(transactionStatus -> {
-            Stream s = streamRepository.save(s);
-            for (StreamApplicationDTO saDTO :
-                    streamDTO.getApplications()) {
-                StreamApplication sa = StreamMapper.instance.fromDTO(saDTO);
-                sa.setStream(s);
-                streamApplicationRepository.save(sa);
-            }
-            return s;
-        }
+        return StreamMapper.instance.toDTO(transactionTemplate.execute(transactionStatus -> {
+                            Stream stream = streamRepository.save(s);
+                            for (StreamApplicationDTO saDTO :
+                                    streamDTO.getApplications()) {
+                                StreamApplication sa = StreamMapper.instance.fromDTO(saDTO);
+                                sa.setStream(s);
+                                streamApplicationRepository.save(sa);
+                            }
+                            return stream;
+                        }
+                )
         );
-        return null;
     }
 }

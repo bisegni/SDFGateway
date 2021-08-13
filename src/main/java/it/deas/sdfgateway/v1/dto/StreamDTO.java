@@ -14,6 +14,6 @@ import java.util.List;
 @Builder
 public class StreamDTO {
     private Integer id;
-    String name;
-    List<StreamApplicationDTO> application = new LinkedList<>();
+    private String name;
+    private List<StreamApplicationDTO> applications = new LinkedList<>();
 }
