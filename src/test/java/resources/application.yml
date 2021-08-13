@@ -1,0 +1,13 @@
+## default connection pool
+spring:
+  datasource:
+    hikari:
+      connectionTimeout: 20000
+      maximumPoolSize: 5
+    url: jdbc:postgresql://localhost:5432/dataflow
+    username: dataflow
+    password: dataflow
+  #drop n create table again, good for testing, comment this in production
+  jpa:
+    hibernate:
+      ddl-auto: create
