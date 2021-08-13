@@ -1,20 +1,29 @@
 package it.deas.sdfgateway.model;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "streams")
+@Data // Lombok: adds getters and setters
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Stream {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name="StreamSeq", sequenceName="JPA_S_SEQ", allocationSize=1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "StreamSeq")
     private Integer id;
     private String name;
     @OneToMany(
-            mappedBy = "stream",
+            cascade = CascadeType.ALL,
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
+            orphanRemoval = true
     )
     List<StreamApplication> applications;
 }

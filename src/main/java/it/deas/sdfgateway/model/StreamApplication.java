@@ -13,17 +13,17 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name="stream_applications")
 public class StreamApplication {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @SequenceGenerator(name="StreamApplicationSeq", sequenceName="JPA_SA_SEQ", allocationSize=1, initialValue = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "StreamApplicationSeq")
     private Integer id;
     private String name;
     private Integer deploymentCount;
     private Integer deploymentMemory;
     @ElementCollection
     private Map<String, String> deploymentOtherParam;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="stream_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "stream_id")
     private Stream stream;
 }

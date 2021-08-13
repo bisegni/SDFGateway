@@ -3,14 +3,12 @@ package it.deas.sdfgateway.service;
 import it.deas.sdfgateway.exception.AppAlreadyRegisteredException;
 import it.deas.sdfgateway.model.Application;
 import it.deas.sdfgateway.model.Stream;
+import it.deas.sdfgateway.model.StreamApplication;
 import it.deas.sdfgateway.repository.ApplicationRepository;
 import it.deas.sdfgateway.repository.SDFRepository;
 import it.deas.sdfgateway.repository.StreamApplicationRepository;
 import it.deas.sdfgateway.repository.StreamRepository;
-import it.deas.sdfgateway.v1.dto.ApplicationDTO;
-import it.deas.sdfgateway.v1.dto.NewStreamDTO;
-import it.deas.sdfgateway.v1.dto.RegisterAppDTO;
-import it.deas.sdfgateway.v1.dto.StreamDTO;
+import it.deas.sdfgateway.v1.dto.*;
 import it.deas.sdfgateway.v1.mapper.ApplicationInfoMapper;
 import it.deas.sdfgateway.v1.mapper.StreamMapper;
 import org.springframework.stereotype.Service;
@@ -60,7 +58,17 @@ public class SDFService {
      */
     public StreamDTO deployStream(NewStreamDTO streamDTO) {
         Stream s = StreamMapper.instance.fromDTO(streamDTO);
-        s = streamRepository.save(s);
+        s = transactionTemplate.execute(transactionStatus -> {
+            Stream s = streamRepository.save(s);
+            for (StreamApplicationDTO saDTO :
+                    streamDTO.getApplications()) {
+                StreamApplication sa = StreamMapper.instance.fromDTO(saDTO);
+                sa.setStream(s);
+                streamApplicationRepository.save(sa);
+            }
+            return s;
+        }
+        );
         return null;
     }
 }

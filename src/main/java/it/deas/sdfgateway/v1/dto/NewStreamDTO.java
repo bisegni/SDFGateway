@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class NewStreamDTO {
-    String name;
+    private String name;
     @Builder.Default
-    List<StreamApplicationDTO> applications = new LinkedList<>();
+    private List<StreamApplicationDTO> applications = new LinkedList<>();
 }
